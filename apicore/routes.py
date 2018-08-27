@@ -17,6 +17,24 @@ answer = api.model('Answer', {
 })
 
 
+@api.route('/auth/register')
+class register(Resource):
+    """Get username and password and register them"""
+
+    def post(self):
+        """ Register a User"""
+        return {'message': 'user is registered'}, 201
+
+
+@api.route('/auth/login')
+class login(Resource):
+    """Login a user and return a token"""
+
+    def post(self):
+        """ Login a user and return a token"""
+        return {'message': 'Invalid username and password'}, 400
+
+
 @api.route('/questions')
 class AllQuestions(Resource):
     """Get and create questions as specified"""
