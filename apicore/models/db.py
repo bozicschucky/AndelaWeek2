@@ -1,5 +1,6 @@
 import psycopg2
 from pprint import pprint
+from passlib.hash import pbkdf2_sha256 as sha256
 
 
 class DbConnect():
@@ -71,6 +72,9 @@ class DbConnect():
             drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
             pprint('all tables dropped')
             self.cursor.execute(drop_table)
+
+    def hash_password(self, password):
+        return sha256.hash(password)
 
     def register(self, username, password):
         ''' adds users to the database '''
