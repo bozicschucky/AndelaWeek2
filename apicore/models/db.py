@@ -1,16 +1,25 @@
 import psycopg2
 from pprint import pprint
 from passlib.hash import pbkdf2_sha256 as sha256
+from .questions import Question
+from .users import User
+from .answers import Answer
 
 
-class DbConnect():
+class DBhandler(User, Answer, Question):
     """ DBhandler class for postgres"""
 
-    def __init__(self):
+    def __init__(self, host, database, user, password):
         try:
-            self.conn = psycopg2.connect(
-                host="localhost", database="api", user="postgres", password="sudo"
-            )
+            self.host = host
+            self.database = database
+            self.user = user
+            self.password = password
+            self.conn = psycopg2.connect(host=self.host,
+                                         database=self.database,
+                                         user=self.user,
+                                         password=self.password)
+            # host="localhost", database="api", user="postgres", password="sudo"
             self.conn.autocommit = True
             self.cursor = self.conn.cursor()
             print('Connection successful')
@@ -82,8 +91,9 @@ class DbConnect():
     def register(self, username, password):
         ''' adds users to the database '''
         password = self.hash_password(password)
+        user = User(username, password)
         sql = "INSERT INTO users(username,password) VALUES ('{}' ,'{}')".format(
-            username, password)
+            user.username, user.password)
         pprint(sql)
         self.cursor.execute(sql)
         return {'message': 'User successfully registered'}
@@ -110,8 +120,9 @@ class DbConnect():
         user = self.cursor.fetchone()
         print(user[0])
         # user_id
+        question = Question(title, body, author)
         sql = "INSERT INTO questions(user_id,title,body,author) VALUES ({} ,'{}','{}','{}')".format(
-            user[0], title, body, author)
+            user[0], question.title, question.body, question.author)
         print(sql)
         self.cursor.execute(sql)
 
