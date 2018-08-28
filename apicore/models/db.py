@@ -130,7 +130,7 @@ class DbConnect():
             _id)
         self.cursor.execute(question_sql)
         question = self.cursor.fetchone()
-        question_id = question[0]
+        # question_id = question[0]
         print(question)
         answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
             _id)
