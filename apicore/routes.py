@@ -44,8 +44,15 @@ class register(Resource):
 class login(Resource):
     """Login a user and return a token"""
 
+    @api.expect(user, validate=True)
     def post(self):
         """ Login a user and return a token"""
+        data = api.payload
+        username = data['username']
+        password = data['password']
+        user = db_handler.get_user(username)
+        if user:
+            return {'message': 'User successfully retrieved'}, 200
         return {'message': 'Invalid username and password'}, 400
 
 
