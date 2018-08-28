@@ -78,4 +78,19 @@ class DbConnect():
             username, password)
         pprint(sql)
         self.cursor.execute(sql)
-        return {'message':'User successfully registered'}
+        return {'message': 'User successfully registered'}
+
+    def get_user(self, username):
+        '''Gets a user to the database '''
+        try:
+
+            sql = "SELECT id,username,password FROM users WHERE username = '{}'".format(
+                username)
+            self.cursor.execute(sql)
+            user = self.cursor.fetchone()
+            username = user[1]
+            password = user[2]
+            return user, password
+        except Exception as e:
+            # print({'error': 'User not found {}'.format(e)})
+            return {'error': 'User not found {}'.format(e)}
