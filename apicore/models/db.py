@@ -64,3 +64,10 @@ class DbConnect():
             self.cursor.execute(command)
             print('tables created successfully')
         self.close_db_connection()
+
+    def drop_table(self, *table_names):
+        ''' Drops the tables created '''
+        for table_name in table_names:
+            drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
+            pprint('all tables dropped')
+            self.cursor.execute(drop_table)
