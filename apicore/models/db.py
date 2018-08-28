@@ -157,6 +157,13 @@ class DbConnect():
         print(sql)
         self.cursor.execute(sql)
 
+    def update(self, accept_status, question_id):
+        ''' updates the question asked '''
+        sql = 'UPDATE answers SET accept_status = {} WHERE id = {}'.format(
+            accept_status, question_id)
+        self.cursor.execute(sql)
+        return {'message': 'Answer status updated'}
+
     def delete_questions(self, _id):
         '''Deletes a question given an id '''
         sql = "DELETE FROM questions WHERE  id = {} ".format(
