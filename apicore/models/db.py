@@ -103,6 +103,18 @@ class DbConnect():
             # print({'error': 'User not found {}'.format(e)})
             return {'error': 'User not found {}'.format(e)}
 
+    def create_question(self, title, body, author):
+        ''' Create a question '''
+        user_sql = "SELECT id FROM users WHERE username = '{}'".format('max')
+        self.cursor.execute(user_sql)
+        user = self.cursor.fetchone()
+        print(user[0])
+        # user_id
+        sql = "INSERT INTO questions(user_id,title,body,author) VALUES ({} ,'{}','{}','{}')".format(
+            user[0], title, body, author)
+        print(sql)
+        self.cursor.execute(sql)
+
     def get_all_questions(self):
         ''' Gets one questions from a database'''
         sql = "SELECT id,title,body FROM questions"
