@@ -71,3 +71,11 @@ class DbConnect():
             drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
             pprint('all tables dropped')
             self.cursor.execute(drop_table)
+
+    def register(self, username, password):
+        ''' adds users to the database '''
+        sql = "INSERT INTO users(username,password) VALUES ('{}' ,'{}')".format(
+            username, password)
+        pprint(sql)
+        self.cursor.execute(sql)
+        return {'message':'User successfully registered'}
