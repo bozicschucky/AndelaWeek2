@@ -1,11 +1,16 @@
 from flask_restplus import Resource, fields
+from flask_jwt_extended import (
+    jwt_required, create_access_token,
+    get_jwt_identity
+)
 from .app import api
 from apicore.models.db import DbConnect
 
 db_handler = DbConnect()
 
 question = api.model('Question', {
-    'author': fields.String(description='Author name', required=True, min_length=5),
+    'author': fields.String(description='Author name',
+                            required=True, min_length=5),
     'title': fields.String(required=True,
                            description='The question title', min_length=10),
 
