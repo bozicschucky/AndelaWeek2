@@ -122,3 +122,24 @@ class DbConnect():
         rows = self.cursor.fetchall()
         questions = [questions for questions in rows]
         return {'all_questions': questions}
+
+    def get_question(self, _id):
+        ''' Gets one questions from a database table'''
+
+        question_sql = "SELECT title,body,author FROM questions WHERE id = {}".format(
+            _id)
+        self.cursor.execute(question_sql)
+        question = self.cursor.fetchone()
+        question_id = question[0]
+        print(question)
+        answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
+            _id)
+        self.cursor.execute(answers_sql)
+        answers = self.cursor.fetchall()
+        answers = [row for row in answers]
+        return {'question': {'title': question[0],
+                             'body': question[1],
+                             'author': question[2],
+                             'answers': answers
+
+                             }}
