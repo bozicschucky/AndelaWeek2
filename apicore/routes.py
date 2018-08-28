@@ -93,6 +93,7 @@ class Question(Resource):
 
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
+        db_handler.delete_questions(_id)
         return {'message': 'question {} deleted'.format(_id)}, 204
 
 
