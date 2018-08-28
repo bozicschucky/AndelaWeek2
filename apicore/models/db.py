@@ -156,3 +156,12 @@ class DbConnect():
             question_id, body)
         print(sql)
         self.cursor.execute(sql)
+
+    def delete_questions(self, _id):
+        '''Deletes a question given an id '''
+        sql = "DELETE FROM questions WHERE  id = {} ".format(
+            _id)
+        rows_deleted = self.cursor.rowcount
+        print(rows_deleted)
+        self.cursor.execute(sql)
+        return {"message": "Question {} deleted".format(_id)}
