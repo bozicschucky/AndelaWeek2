@@ -102,3 +102,11 @@ class DbConnect():
         except Exception as e:
             # print({'error': 'User not found {}'.format(e)})
             return {'error': 'User not found {}'.format(e)}
+
+    def get_all_questions(self):
+        ''' Gets one questions from a database'''
+        sql = "SELECT id,title,body FROM questions"
+        self.cursor.execute(sql)
+        rows = self.cursor.fetchall()
+        questions = [questions for questions in rows]
+        return {'all_questions': questions}
