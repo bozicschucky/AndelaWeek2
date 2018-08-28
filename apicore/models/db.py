@@ -81,6 +81,7 @@ class DbConnect():
 
     def register(self, username, password):
         ''' adds users to the database '''
+        password = self.hash_password(password)
         sql = "INSERT INTO users(username,password) VALUES ('{}' ,'{}')".format(
             username, password)
         pprint(sql)
