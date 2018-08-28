@@ -76,6 +76,9 @@ class DbConnect():
     def hash_password(self, password):
         return sha256.hash(password)
 
+    def confirm_password_hash(self, password, pasword_hash):
+        return sha256.verify(password, pasword_hash)
+
     def register(self, username, password):
         ''' adds users to the database '''
         sql = "INSERT INTO users(username,password) VALUES ('{}' ,'{}')".format(
