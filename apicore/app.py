@@ -5,6 +5,7 @@ app = Flask(__name__, instance_relative_config=True)
 
 app.config.from_object(DevelopmentConfig)
 # app.config.from_pyfile()
+app.config['RESTPLUS_VALIDATE'] = True
 
 
 api = Api(app, prefix='/api/v2', version='2.0',
