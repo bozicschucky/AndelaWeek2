@@ -42,7 +42,7 @@ class register(Resource):
         username = data['username']
         password = data['password']
         db_handler.register(username, password)
-        return {'message': 'user is registered'}, 201
+        return {'message': 'user is successfully registered'}, 201
 
 
 @api.route('/auth/login')
@@ -55,10 +55,13 @@ class login(Resource):
         data = api.payload
         username = data['username']
         password = data['password']
-        user = db_handler.get_user(username)
-        if user:
-            return {'message': 'User successfully retrieved'}, 200
-        return {'message': 'Invalid username and password'}, 400
+        user, pasword_hash = db_handler.get_user(username)
+        if user and db_handler.confirm_password_hash(password, pasword_hash):
+            print('The user is confirmed')
+            access_token = create_access_token(identity=username)
+            return {'message': 'Token created',
+                    'access_token': access_token}, 201
+        return {'message': 'Invalid username or password'}, 400
 
 
 @api.route('/questions')
