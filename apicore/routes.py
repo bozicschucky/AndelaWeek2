@@ -4,9 +4,10 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 from .app import api
-from apicore.models.db import DbConnect
+from apicore.models.db import DBhandler
 
-db_handler = DbConnect()
+db_handler = DBhandler(host="localhost", database="api",
+                       user="postgres", password="sudo")
 
 question = api.model('Question', {
     'author': fields.String(description='Author name',
@@ -72,7 +73,7 @@ class login(Resource):
 @api.route('/questions')
 class AllQuestions(Resource):
     """Get and create questions as specified"""
-
+    @jwt_required
     def get(self):
         """Get all questions asked """
         questions = db_handler.get_all_questions()
