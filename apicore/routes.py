@@ -1,6 +1,8 @@
 from flask_restplus import Resource, fields
 from .app import api
+from apicore.models.db import DbConnect
 
+db_handler = DbConnect()
 
 question = api.model('Question', {
     'author': fields.String(description='Author name', required=True, min_length=5),
@@ -16,13 +18,25 @@ answer = api.model('Answer', {
                           description='The Answer details', min_length=10)
 })
 
+user = api.model('User', {
+    'username': fields.String(required=True,
+                              description='username', min_length=6),
+    'password': fields.String(required=True,
+                              description='password', min_length=8)
+})
+
 
 @api.route('/auth/register')
 class register(Resource):
     """Get username and password and register them"""
 
+    @api.expect(user, validate=True)
     def post(self):
         """ Register a User"""
+        data = api.payload
+        username = data['username']
+        password = data['password']
+        db_handler.register(username, password)
         return {'message': 'user is registered'}, 201
 
 
