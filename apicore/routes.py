@@ -89,7 +89,7 @@ class Question(Resource):
 
     def get(self, _id):
         ''' Get a given resource/question based on id '''
-        return {'message': 'question {} returned'.format(_id)}
+        return db_handler.get_question(_id)
 
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
@@ -98,7 +98,12 @@ class Question(Resource):
 
 @api.route('/questions/<int:_id>/answers')
 class QuestionsReply(Resource):
+    """Reply to a specific question"""
+    @api.expect(answer, validate=True)
     def post(self, _id):
+        return {'message': 'answer created for  question {}'.format(_id)}, 201
+        data = api.payload
+        db_handler.answer_question(_id, data['body'])
         return {'message': 'answer created for  question {}'.format(_id)}, 201
 
 
