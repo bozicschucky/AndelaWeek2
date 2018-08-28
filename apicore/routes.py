@@ -73,9 +73,14 @@ class AllQuestions(Resource):
         questions = db_handler.get_all_questions()
         return questions
 
+    @api.expect(question, validate=True)
     def post(self):
-        """Creates a question """
-        return {'questions': 'created'}
+        """Creates a question for a logged in user """
+        data = api.payload
+        title = data['title']
+        body = data['body']
+        author = data['author']
+        return db_handler.create_question(title, body, author), 201
 
 
 @api.route('/questions/<int:_id>')
