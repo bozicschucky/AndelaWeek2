@@ -143,3 +143,16 @@ class DbConnect():
                              'answers': answers
 
                              }}
+
+    def answer_question(self, _id, body):
+        ''' Creates an answer to a question '''
+        question_sql = "SELECT id FROM questions WHERE id = {}".format(_id)
+        self.cursor.execute(question_sql)
+        question = self.cursor.fetchone()
+        question_id = question[0]
+        print(question[0])
+        # question_id
+        sql = "INSERT INTO answers(question_id,body) VALUES ({},'{}')".format(
+            question_id, body)
+        print(sql)
+        self.cursor.execute(sql)
