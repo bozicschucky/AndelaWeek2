@@ -70,7 +70,8 @@ class AllQuestions(Resource):
 
     def get(self):
         """Get all questions asked """
-        return {'questions': 'all questions'}
+        questions = db_handler.get_all_questions()
+        return questions
 
     def post(self):
         """Creates a question """
@@ -83,7 +84,7 @@ class Question(Resource):
 
     def get(self, _id):
         ''' Get a given resource/question based on id '''
-        return {'message': 'question given an id'}
+        return {'message': 'question {} returned'.format(_id)}
 
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
