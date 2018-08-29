@@ -194,7 +194,7 @@ class DBhandler(User, Answer, Question):
             print(sql)
             self.cursor.execute(sql)
         except Exception as e:
-            return {'message':'Question does\'nt exist'}
+            return {'message': 'Question does\'nt exist'}
 
     def update(self, accept_status, question_id):
         ''' updates the question asked '''
@@ -211,9 +211,3 @@ class DBhandler(User, Answer, Question):
         print(rows_deleted)
         self.cursor.execute(sql)
         return {"message": "Question {} deleted".format(_id)}
-
-
-db = DBhandler(host="localhost", database="api",
-               user="postgres", password="sudo")
-
-# db.get_question()
