@@ -10,6 +10,8 @@ app.config.from_object(DevelopmentConfig)
 # app.config.from_pyfile()
 app.config['RESTPLUS_VALIDATE'] = True
 app.config['JWT_SECRET_KEY'] = 'random#$8990000000secret'
+# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=2)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
 
 jwt = JWTManager(app)
