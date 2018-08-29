@@ -182,16 +182,19 @@ class DBhandler(User, Answer, Question):
 
     def answer_question(self, _id, body):
         ''' Creates an answer to a question '''
-        question_sql = "SELECT id FROM questions WHERE id = {}".format(_id)
-        self.cursor.execute(question_sql)
-        question = self.cursor.fetchone()
-        question_id = question[0]
-        print(question[0])
-        # question_id
-        sql = "INSERT INTO answers(question_id,body) VALUES ({},'{}')".format(
-            question_id, body)
-        print(sql)
-        self.cursor.execute(sql)
+        try:
+            question_sql = "SELECT id FROM questions WHERE id = {}".format(_id)
+            self.cursor.execute(question_sql)
+            question = self.cursor.fetchone()
+            question_id = question[0]
+            print(question[0])
+            # question_id
+            sql = "INSERT INTO answers(question_id,body) VALUES ({},'{}')".format(
+                question_id, body)
+            print(sql)
+            self.cursor.execute(sql)
+        except Exception as e:
+            return {'message':'Question does\'nt exist'}
 
     def update(self, accept_status, question_id):
         ''' updates the question asked '''
