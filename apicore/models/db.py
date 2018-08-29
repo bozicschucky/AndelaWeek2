@@ -64,7 +64,7 @@ class DBhandler(User, Answer, Question):
               question_id int NOT NULL,
               body VARCHAR(2550),
               accept_status boolean DEFAULT FALSE,
-              published_date timestabmp DEFAULT CURRENT_TIMESTAMP,
+              published_date timestamp DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
               FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
             );
@@ -73,7 +73,7 @@ class DBhandler(User, Answer, Question):
         for command in commands:
             self.cursor.execute(command)
             print('tables created successfully')
-        self.close_db_connection()
+        # self.close_db_connection()
 
     def drop_table(self, *table_names):
         ''' Drops the tables created '''
@@ -111,11 +111,11 @@ class DBhandler(User, Answer, Question):
             return user, password
         except Exception as e:
             # print({'error': 'User not found {}'.format(e)})
-            return {'error': 'User not found {}'.format(e)}
+            return{'message': 'User not found'}, 404
 
     def create_question(self, title, body, author):
         ''' Create a question '''
-        user_sql = "SELECT id FROM users WHERE username = '{}'".format('max')
+        user_sql = "SELECT id FROM users WHERE username = '{}'".format('chucky')
         self.cursor.execute(user_sql)
         user = self.cursor.fetchone()
         print(user[0])
@@ -132,28 +132,49 @@ class DBhandler(User, Answer, Question):
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
         questions = [questions for questions in rows]
-        return {'all_questions': questions}
+        # print(questions)
+        last_questions = []
+        for index in range(len(questions)):
+            # print(question)
+            user_questions = (
+                {'id': questions[index][0],
+                 'title': questions[index][1],
+                 'body': questions[index][2]})
+            last_questions.append(user_questions)
+
+        return {'all_questions': last_questions}
 
     def get_question(self, _id):
         ''' Gets one questions from a database table'''
+        try:
+            question_sql = "SELECT title,body,author,published_date FROM questions WHERE id = {}".format(
+                _id)
+            self.cursor.execute(question_sql)
+            question = self.cursor.fetchone()
+            # question_id = question[0]
+            print(question)
+            answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
+                _id)
+            self.cursor.execute(answers_sql)
+            answers = self.cursor.fetchall()
+            answers = [row for row in answers]
+            fetched_answers = []
+            for index in range(len(answers)):
+                user_answers = (
+                    {
+                        'id': answers[index][0],
+                        'body': answers[index][1]
+                    })
+                fetched_answers.append(user_answers)
+            return {'question': {'title': question[0],
+                                 'body': question[1],
+                                 'author': question[2],
+                                 'date': str(question[3]),
+                                 'answers': fetched_answers
 
-        question_sql = "SELECT title,body,author FROM questions WHERE id = {}".format(
-            _id)
-        self.cursor.execute(question_sql)
-        question = self.cursor.fetchone()
-        # question_id = question[0]
-        print(question)
-        answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
-            _id)
-        self.cursor.execute(answers_sql)
-        answers = self.cursor.fetchall()
-        answers = [row for row in answers]
-        return {'question': {'title': question[0],
-                             'body': question[1],
-                             'author': question[2],
-                             'answers': answers
-
-                             }}
+                                 }}
+        except Exception as e:
+            return{'message': 'Quesion does\'nt exist'}, 404
 
     def answer_question(self, _id, body):
         ''' Creates an answer to a question '''
