@@ -115,7 +115,8 @@ class DBhandler(User, Answer, Question):
 
     def create_question(self, title, body, author):
         ''' Create a question '''
-        user_sql = "SELECT id FROM users WHERE username = '{}'".format('chucky')
+        user_sql = "SELECT id FROM users WHERE username = '{}'".format(
+            'chucky')
         self.cursor.execute(user_sql)
         user = self.cursor.fetchone()
         print(user[0])
@@ -126,9 +127,10 @@ class DBhandler(User, Answer, Question):
         print(sql)
         self.cursor.execute(sql)
 
-    def get_all_questions(self):
+    def get_all_questions(self, current_user):
         ''' Gets one questions from a database'''
-        sql = "SELECT id,title,body FROM questions"
+        sql = "SELECT id,title,body FROM questions WHERE author = '{}' ".format(
+            current_user)
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
         questions = [questions for questions in rows]
@@ -144,11 +146,11 @@ class DBhandler(User, Answer, Question):
 
         return {'all_questions': last_questions}
 
-    def get_question(self, _id):
-        ''' Gets one questions from a database table'''
+    def get_question(self, _id, current_user):
+        ''' Gets one questions from a database table based on user'''
         try:
-            question_sql = "SELECT title,body,author,published_date FROM questions WHERE id = {}".format(
-                _id)
+            question_sql = "SELECT title,body,author,published_date FROM questions WHERE id = {} AND author = '{}'".format(
+                _id, current_user)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
             # question_id = question[0]
@@ -204,3 +206,9 @@ class DBhandler(User, Answer, Question):
         print(rows_deleted)
         self.cursor.execute(sql)
         return {"message": "Question {} deleted".format(_id)}
+
+
+db = DBhandler(host="localhost", database="api",
+               user="postgres", password="sudo")
+
+db.get_question
