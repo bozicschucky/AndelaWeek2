@@ -10,8 +10,6 @@ db_handler = DBhandler(host="localhost", database="api",
                        user="postgres", password="sudo")
 
 question = api.model('Question', {
-    'author': fields.String(description='Author name',
-                            required=True, min_length=5),
     'title': fields.String(required=True,
                            description='The question title', min_length=10),
 
@@ -77,17 +75,20 @@ class AllQuestions(Resource):
     @jwt_required
     def get(self):
         """Get all questions asked """
-        questions = db_handler.get_all_questions()
+        current_user = get_jwt_identity()
+        print(current_user)
+        questions = db_handler.get_all_questions(current_user)
         return questions
 
     @jwt_required
     @api.expect(question, validate=True)
     def post(self):
         """Creates a question for a logged in user """
+        current_user = get_jwt_identity()
         data = api.payload
         title = data['title']
         body = data['body']
-        author = data['author']
+        author = current_user
         return db_handler.create_question(title, body, author), 201
 
 
@@ -97,8 +98,9 @@ class Question(Resource):
 
     @jwt_required
     def get(self, _id):
+        current_user = get_jwt_identity()
         ''' Get a given resource/question based on id '''
-        return db_handler.get_question(_id)
+        return db_handler.get_question(_id, current_user)
 
     @jwt_required
     def delete(self, _id):
