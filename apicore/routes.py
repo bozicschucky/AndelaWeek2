@@ -73,7 +73,8 @@ class login(Resource):
 @api.route('/questions')
 class AllQuestions(Resource):
     """Get and create questions as specified"""
-    @jwt_required
+
+    # @jwt_required
     def get(self):
         """Get all questions asked """
         questions = db_handler.get_all_questions()
@@ -100,7 +101,7 @@ class Question(Resource):
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
         db_handler.delete_questions(_id)
-        return {'message': 'question {} deleted'.format(_id)}, 204
+        return {'message': 'question {} deleted'.format(_id)}, 202
 
 
 @api.route('/questions/<int:_id>/answers')
@@ -108,7 +109,7 @@ class QuestionsReply(Resource):
     """Reply to a specific question"""
     @api.expect(answer, validate=True)
     def post(self, _id):
-        return {'message': 'answer created for  question {}'.format(_id)}, 201
+        '''Get a question and reply to it with an Answer '''
         data = api.payload
         db_handler.answer_question(_id, data['body'])
         return {'message': 'answer created for  question {}'.format(_id)}, 201
