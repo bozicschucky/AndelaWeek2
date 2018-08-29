@@ -34,6 +34,11 @@ user = api.model('User', {
                               description='password', min_length=8)
 })
 
+jwt = {'Authorization': {'Authorization': 'Bearer',
+                         'in': 'header',
+                         'type': 'string',
+                         'description': 'Enter jwt token'}}
+
 
 @api.route('/auth/register')
 class register(Resource):
@@ -73,6 +78,7 @@ class AllQuestions(Resource):
     """Get and create questions as specified"""
 
     @jwt_required
+    @api.doc(params=jwt)
     def get(self):
         """Get all questions asked """
         current_user = get_jwt_identity()
@@ -81,6 +87,7 @@ class AllQuestions(Resource):
         return questions
 
     @jwt_required
+    @api.doc(params=jwt)
     @api.expect(question, validate=True)
     def post(self):
         """Creates a question for a logged in user """
@@ -97,12 +104,14 @@ class Question(Resource):
     """Shows single items of the resources created"""
 
     @jwt_required
+    @api.doc(params=jwt)
     def get(self, _id):
         current_user = get_jwt_identity()
         ''' Get a given resource/question based on id '''
         return db_handler.get_question(_id, current_user)
 
     @jwt_required
+    @api.doc(params=jwt)
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
         current_user = get_jwt_identity()
@@ -114,6 +123,7 @@ class Question(Resource):
 class QuestionsReply(Resource):
     """Reply to a specific question"""
     @jwt_required
+    @api.doc(params=jwt)
     @api.expect(answer, validate=True)
     def post(self, _id):
         '''Get a question and reply to it with an Answer '''
@@ -127,6 +137,7 @@ class QuestionsReply(Resource):
 class Answerupdate(Resource):
     """Mark an answer as accepted or update an answer"""
     @jwt_required
+    @api.doc(params=jwt)
     @api.expect(answer_update, validate=True)
     # @api.marshal_with(answer, skip_none=True, code=201)
     def put(self, author_id, id):
