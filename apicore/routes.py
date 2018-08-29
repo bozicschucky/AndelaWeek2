@@ -89,7 +89,7 @@ class AllQuestions(Resource):
         title = data['title']
         body = data['body']
         author = current_user
-        return db_handler.create_question(title, body, author), 201
+        return db_handler.create_question(title, body, author)
 
 
 @api.route('/questions/<int:_id>')
@@ -105,7 +105,8 @@ class Question(Resource):
     @jwt_required
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
-        db_handler.delete_questions(_id)
+        current_user = get_jwt_identity()
+        db_handler.delete_questions(_id, current_user)
         return {'message': 'question {} deleted'.format(_id)}, 202
 
 
@@ -116,6 +117,7 @@ class QuestionsReply(Resource):
     @api.expect(answer, validate=True)
     def post(self, _id):
         '''Get a question and reply to it with an Answer '''
+        current_user = get_jwt_identity()
         data = api.payload
         db_handler.answer_question(_id, data['body'])
         return {'message': 'answer created for  question {}'.format(_id)}, 201

@@ -116,7 +116,7 @@ class DBhandler(User, Answer, Question):
     def create_question(self, title, body, author):
         ''' Create a question '''
         user_sql = "SELECT id FROM users WHERE username = '{}'".format(
-            'chucky')
+            author)
         self.cursor.execute(user_sql)
         user = self.cursor.fetchone()
         print(user[0])
@@ -126,6 +126,7 @@ class DBhandler(User, Answer, Question):
             user[0], question.title, question.body, question.author)
         print(sql)
         self.cursor.execute(sql)
+        return {'message': 'Question created'}, 201
 
     def get_all_questions(self, current_user):
         ''' Gets one questions from a database'''
@@ -153,6 +154,7 @@ class DBhandler(User, Answer, Question):
                 _id, current_user)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
+            print(question)
             # question_id = question[0]
             print(question)
             answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
@@ -176,7 +178,7 @@ class DBhandler(User, Answer, Question):
 
                                  }}
         except Exception as e:
-            return{'message': 'Quesion does\'nt exist'}, 404
+            return{'message': 'Quesion {} does\'nt exist'.format(_id)}, 404
 
     def answer_question(self, _id, body):
         ''' Creates an answer to a question '''
@@ -198,10 +200,10 @@ class DBhandler(User, Answer, Question):
         self.cursor.execute(sql)
         return {'message': 'Answer status updated'}
 
-    def delete_questions(self, _id):
+    def delete_questions(self, _id, current_user):
         '''Deletes a question given an id '''
-        sql = "DELETE FROM questions WHERE  id = {} ".format(
-            _id)
+        sql = "DELETE FROM questions WHERE  id = {} AND author = '{}' ".format(
+            _id, current_user)
         rows_deleted = self.cursor.rowcount
         print(rows_deleted)
         self.cursor.execute(sql)
@@ -211,4 +213,4 @@ class DBhandler(User, Answer, Question):
 db = DBhandler(host="localhost", database="api",
                user="postgres", password="sudo")
 
-db.get_question
+# db.get_question()
