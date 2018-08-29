@@ -10,6 +10,10 @@ app.config.from_object(DevelopmentConfig)
 # app.config.from_pyfile()
 app.config['RESTPLUS_VALIDATE'] = True
 app.config['JWT_SECRET_KEY'] = 'random#$8990000000secret'
+# swagger ui configs
+app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
+app.config.SWAGGER_UI_OPERATION_ID = True
+app.config.SWAGGER_UI_REQUEST_DURATION = True
 # app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=2)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
