@@ -74,12 +74,13 @@ class login(Resource):
 class AllQuestions(Resource):
     """Get and create questions as specified"""
 
-    # @jwt_required
+    @jwt_required
     def get(self):
         """Get all questions asked """
         questions = db_handler.get_all_questions()
         return questions
 
+    @jwt_required
     @api.expect(question, validate=True)
     def post(self):
         """Creates a question for a logged in user """
@@ -94,10 +95,12 @@ class AllQuestions(Resource):
 class Question(Resource):
     """Shows single items of the resources created"""
 
+    @jwt_required
     def get(self, _id):
         ''' Get a given resource/question based on id '''
         return db_handler.get_question(_id)
 
+    @jwt_required
     def delete(self, _id):
         '''Delete a certain resource/question given an id'''
         db_handler.delete_questions(_id)
@@ -107,6 +110,7 @@ class Question(Resource):
 @api.route('/questions/<int:_id>/answers')
 class QuestionsReply(Resource):
     """Reply to a specific question"""
+    @jwt_required
     @api.expect(answer, validate=True)
     def post(self, _id):
         '''Get a question and reply to it with an Answer '''
@@ -118,6 +122,7 @@ class QuestionsReply(Resource):
 @api.route('/questions/<int:author_id>/answers/<int:id>')
 class Answerupdate(Resource):
     """Mark an answer as accepted or update an answer"""
+    @jwt_required
     @api.expect(answer_update, validate=True)
     # @api.marshal_with(answer, skip_none=True, code=201)
     def put(self, author_id, id):
