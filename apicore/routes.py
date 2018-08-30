@@ -12,7 +12,7 @@ if os.getenv('APP_SETTINGS') == 'testing':
                            user='postgres', password='sudo')
 
 else:
-    self.db = os.getenv('Database')
+    db = os.getenv('Database')
     db_handler = DBhandler(host=os.getenv('host'), database='',
                            user=os.getenv('User'),
                            password=os.getenv('Password'))
