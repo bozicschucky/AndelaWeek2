@@ -11,7 +11,7 @@ class DBhandler(User, Answer, Question):
     """ DBhandler class for postgres"""
 
     def __init__(self, host, database, user, password):
-        if os.getenv('APP_SETTING') == 'testing':
+        if os.getenv('APP_SETTINGS') == 'testing':
             self.db = 'api_test'
 
         else:
