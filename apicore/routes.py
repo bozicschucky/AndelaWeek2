@@ -5,9 +5,10 @@ from flask_jwt_extended import (
 )
 from .app import api
 from apicore.models.db import DBhandler
+import os
 
-db_handler = DBhandler(host="localhost", database="",
-                       user="postgres", password="sudo")
+db_handler = DBhandler(host=os.getenv('host'), database='',
+                       user=os.getenv('User'), password=os.getenv('Password'))
 # db_handler.create_table()
 
 question = api.model('Question', {
