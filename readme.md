@@ -3,7 +3,7 @@
 StackOverFlow-Lite App is an application that provides users with the ability to reach out to ask a question and get an answer.
 
 #Build status  
-[![Build Status](https://travis-ci.org/bozicschucky/AndelaWeek2.svg?branch=ft-heroku)](https://travis-ci.org/bozicschucky/AndelaWeek2)  
+[![Build Status](https://travis-ci.org/bozicschucky/AndelaWeek2.svg?branch=ft-heroku)](https://travis-ci.org/bozicschucky/AndelaWeek2)
 [![Coverage Status](https://coveralls.io/repos/github/bozicschucky/AndelaWeek2/badge.svg?branch=ft-heroku)](https://coveralls.io/github/bozicschucky/AndelaWeek2?branch=ft-heroku)
 
 # Getting Started
