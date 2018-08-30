@@ -22,13 +22,13 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 * On the browser,visit the following url
 
 * Some of the data arguments to be passed in postman
-  # Users register/Login Endpoint takes the following data.
+  * Users register/Login Endpoint takes the following data.
   ` {
         "username": "string",
         "password": "string"
           }
     `    
-   # Users Question json data Endpoint takes the following data.
+   * Users Question json data Endpoint takes the following data.
    `
    {
       "title": "string",
@@ -36,7 +36,7 @@ StackOverFlow-Lite App is an application that provides users with the ability to
     }
     `
 
-     # Users Answer json data Endpoint takes the following data.
+     * Users Answer json data Endpoint takes the following data.
    `
    {
       "body": "string"
