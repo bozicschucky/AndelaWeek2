@@ -4,15 +4,22 @@ from passlib.hash import pbkdf2_sha256 as sha256
 from .questions import Question
 from .users import User
 from .answers import Answer
+import os
 
 
 class DBhandler(User, Answer, Question):
     """ DBhandler class for postgres"""
 
     def __init__(self, host, database, user, password):
+        if os.getenv('APP_SETTINGS') == 'testing':
+            self.db = 'api_test'
+
+        else:
+            self.db = 'api'
+
         try:
             self.host = host
-            self.database = database
+            self.database = self.db
             self.user = user
             self.password = password
             self.conn = psycopg2.connect(host=self.host,
@@ -20,6 +27,8 @@ class DBhandler(User, Answer, Question):
                                          user=self.user,
                                          password=self.password)
             # host="localhost", database="api", user="postgres", password="sudo"
+            print(self.database)
+            print(os.getenv('APP_SETTINGS'))
             self.conn.autocommit = True
             self.cursor = self.conn.cursor()
             print('Connection successful')
@@ -119,7 +128,7 @@ class DBhandler(User, Answer, Question):
             author)
         self.cursor.execute(user_sql)
         user = self.cursor.fetchone()
-        print(user[0])
+        # print(user[0])
         # user_id
         question = Question(title, body, author)
         sql = "INSERT INTO questions(user_id,title,body,author) VALUES ({} ,'{}','{}','{}')".format(
