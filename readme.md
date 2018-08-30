@@ -78,13 +78,13 @@ StackOverFlow-Lite App is an application that provides users with the ability to
       * Visit the endpoints descibed above using post man to test the endpoints
 
 
-  3.Tools used to develop this Api.  
-    * Postgres version 10  
-    * Flask 1.0.2  
-    * Flask-JWT-Extended   
-    * Flask-restplus 0.11.0  
-    * Autoenv   
-    * Swaggerui To document the API   
+  4.  Tools used to develop this Api.  
+        * Postgres version 10  
+        * Flask 1.0.2  
+        * Flask-JWT-Extended   
+        * Flask-restplus 0.11.0  
+        * Autoenv   
+        * Swaggerui To document the API   
 
     
 
