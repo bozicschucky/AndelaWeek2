@@ -2,7 +2,7 @@
 # StackOverFlow-Lite
 StackOverFlow-Lite App is an application that provides users with the ability to reach out to ask a question and get an answer.
 
-#Build status  
+# Build status  
 [![Build Status](https://travis-ci.org/bozicschucky/AndelaWeek2.svg?branch=ft-heroku)](https://travis-ci.org/bozicschucky/AndelaWeek2)
 [![Coverage Status](https://coveralls.io/repos/github/bozicschucky/AndelaWeek2/badge.svg?branch=ft-heroku)](https://coveralls.io/github/bozicschucky/AndelaWeek2?branch=ft-heroku)
 
@@ -21,8 +21,11 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
 
 **Usage**
+  * [StackOverFlow-Lite](https://stackoverflowlite2.herokuapp.com/)
+
 
 * On the browser,visit the following url
+  * https://stackoverflowlite2.herokuapp.com/
 
 * Some of the data arguments to be passed in postman
   * Users register/Login Endpoint takes the following data.  
