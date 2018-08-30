@@ -6,8 +6,9 @@ from flask_jwt_extended import (
 from .app import api
 from apicore.models.db import DBhandler
 
-db_handler = DBhandler(host="localhost", database="api",
+db_handler = DBhandler(host="localhost", database="",
                        user="postgres", password="sudo")
+# db_handler.create_table()
 
 question = api.model('Question', {
     'title': fields.String(required=True,
