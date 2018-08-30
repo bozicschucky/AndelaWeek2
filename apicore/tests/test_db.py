@@ -1,6 +1,4 @@
 import unittest
-import json
-from apicore.app import app
 from apicore.models.db import DBhandler
 
 
@@ -26,14 +24,14 @@ class DBModelTestCase(unittest.TestCase):
         '''Test question creation  '''
         self.db_handler.register('charlse', 'password')
         question = self.db_handler.create_question('I need some help',
-                                                   'How do i fix python imports', 'charlse')
+                              'How do i fix python imports', 'charlse')
         self.assertEqual(({'message': 'Question created'}, 201), question)
 
     def test_can_get_all_questions(self):
         ''' Gets all questions for a given author '''
         self.db_handler.register('charlse', 'password')
         self.db_handler.create_question('I need some help',
-                                        'How do i fix python imports', 'charlse')
+                                    'How do i fix python imports', 'charlse')
         self.db_handler.create_question('I have git merge conflicts',
                                         'How do i rebase this code', 'charlse')
         self.db_handler.create_question(

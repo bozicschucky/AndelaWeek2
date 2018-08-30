@@ -237,7 +237,7 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
 
         answer = {"body": "Use windows because its cool",
-                  'accept_status':False}
+                  'accept_status': False}
         res = self.client.post('/api/v2/questions/1/answers',
                                data=json.dumps(answer),
                                content_type='application/json',

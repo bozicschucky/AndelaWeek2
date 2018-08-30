@@ -26,7 +26,6 @@ class DBhandler(User, Answer, Question):
                                          database=self.database,
                                          user=self.user,
                                          password=self.password)
-            # host="localhost", database="api", user="postgres", password="sudo"
             print(self.database)
             print(os.getenv('APP_SETTINGS'))
             self.conn.autocommit = True
@@ -75,7 +74,8 @@ class DBhandler(User, Answer, Question):
               accept_status boolean DEFAULT FALSE,
               published_date timestamp DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
-              FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+              FOREIGN KEY (question_id) REFERENCES questions(id) \
+              ON DELETE CASCADE
             );
             """,
         )
@@ -101,8 +101,8 @@ class DBhandler(User, Answer, Question):
         ''' adds users to the database '''
         password = self.hash_password(password)
         user = User(username, password)
-        sql = "INSERT INTO users(username,password) VALUES ('{}' ,'{}')".format(
-            user.username, user.password)
+        sql = "INSERT INTO users(username,password) VALUES \
+         ('{}' ,'{}')".format(user.username, user.password)
         pprint(sql)
         self.cursor.execute(sql)
         return {'message': 'User successfully registered'}
@@ -111,8 +111,8 @@ class DBhandler(User, Answer, Question):
         '''Gets a user to the database '''
         try:
 
-            sql = "SELECT id,username,password FROM users WHERE username = '{}'".format(
-                username)
+            sql = "SELECT id,username,password FROM users \
+             WHERE username = '{}'".format(username)
             self.cursor.execute(sql)
             user = self.cursor.fetchone()
             username = user[1]
@@ -131,7 +131,8 @@ class DBhandler(User, Answer, Question):
         # print(user[0])
         # user_id
         question = Question(title, body, author)
-        sql = "INSERT INTO questions(user_id,title,body,author) VALUES ({} ,'{}','{}','{}')".format(
+        sql = "INSERT INTO questions(user_id,title,body,author) \
+         VALUES ({} ,'{}','{}','{}')".format(
             user[0], question.title, question.body, question.author)
         print(sql)
         self.cursor.execute(sql)
@@ -139,7 +140,8 @@ class DBhandler(User, Answer, Question):
 
     def get_all_questions(self, current_user):
         ''' Gets one questions from a database'''
-        sql = "SELECT id,title,body FROM questions WHERE author = '{}' ".format(
+        sql = "SELECT id,title,body FROM questions \
+         WHERE author = '{}' ".format(
             current_user)
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
@@ -159,14 +161,16 @@ class DBhandler(User, Answer, Question):
     def get_question(self, _id, current_user):
         ''' Gets one questions from a database table based on user'''
         try:
-            question_sql = "SELECT title,body,author,published_date FROM questions WHERE id = {} AND author = '{}'".format(
+            question_sql = "SELECT title,body,author,published_date \
+             FROM questions WHERE id = {} AND author = '{}'".format(
                 _id, current_user)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
             print(question)
             # question_id = question[0]
             print(question)
-            answers_sql = "SELECT id,body,accept_status FROM answers WHERE question_id = {}".format(
+            answers_sql = "SELECT id,body,accept_status \
+             FROM answers WHERE question_id = {}".format(
                 _id)
             self.cursor.execute(answers_sql)
             answers = self.cursor.fetchall()
@@ -199,7 +203,8 @@ class DBhandler(User, Answer, Question):
             question_id = question[0]
             print(question[0])
             # question_id
-            sql = "INSERT INTO answers(question_id,body) VALUES ({},'{}')".format(
+            sql = "INSERT INTO answers(question_id,body) \
+             VALUES ({},'{}')".format(
                 question_id, body)
             print(sql)
             self.cursor.execute(sql)
