@@ -22,19 +22,13 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 * On the browser,visit the following url
 
 * Some of the data arguments to be passed in postman
-  * Users register/Login Endpoint takes the following data. 
-    &nbsp;
-    &nbsp;
-    &nbsp; 
+  * Users register/Login Endpoint takes the following data.  
   ` {
         "username": "string",
         "password": "string"
           }
     `    
    * Users Question json data Endpoint takes the following data.  
-  &nbsp;
-  &nbsp;
-  &nbsp;
    `
    {
       "title": "string",
@@ -43,9 +37,6 @@ StackOverFlow-Lite App is an application that provides users with the ability to
     `
 
    * Users Answer json data Endpoint takes the following data.  
-  &nbsp;
-  &nbsp;
-  &nbsp;
    `
    {
       "body": "string"
@@ -87,7 +78,15 @@ StackOverFlow-Lite App is an application that provides users with the ability to
       * Visit the endpoints descibed above using post man to test the endpoints
 
 
-  
+  3.Tools used to develop this Api.
+    * Postgres version 10
+    * Flask 1.0.2
+    * Flask-JWT-Extended 
+    * Flask-restplus 0.11.0
+    * Autoenv 
+    * Swaggerui To document the API 
+
+    
 
 
 
