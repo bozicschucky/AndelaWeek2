@@ -176,7 +176,8 @@ class DBhandler(User, Answer, Question):
                 user_answers = (
                     {
                         'id': answers[index][0],
-                        'body': answers[index][1]
+                        'body': answers[index][1],
+                        'status': answers[index][2]
                     })
                 fetched_answers.append(user_answers)
             return {'question': {'title': question[0],

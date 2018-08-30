@@ -19,14 +19,11 @@ question = api.model('Question', {
 })
 
 answer = api.model('Answer', {
-    'body': fields.String(required=True,
-                          description='The Answer details', min_length=10)
-})
-
-answer_update = api.model('Answer', {
+    'body': fields.String(description='The Answer details', min_length=10),
     'accept_status': fields.Boolean(description='The Answer accept status',
                                     required=True, default=False)
 })
+
 
 user = api.model('User', {
     'username': fields.String(required=True,
@@ -134,17 +131,19 @@ class QuestionsReply(Resource):
         return {'message': 'answer created for  question {}'.format(_id)}, 201
 
 
-@api.route('/questions/<int:author_id>/answers/<int:id>')
+@api.route('/questions/<int:question_id>/answers/<int:id>')
 class Answerupdate(Resource):
     """Mark an answer as accepted or update an answer"""
     @jwt_required
     @api.doc(params=jwt)
-    @api.expect(answer_update, validate=True)
+    @api.expect(answer, validate=True)
     # @api.marshal_with(answer, skip_none=True, code=201)
     def put(self, author_id, id):
         data = api.payload
-        question_id = author_id
-        print(author_id)
+        question_id = question_id
+        # print(author_id)
+        _id = id
+        print(_id)
         accept_status = data['accept_status']
         db_handler.update(accept_status, question_id)
         return {'message': 'Answer status updated'}, 201
