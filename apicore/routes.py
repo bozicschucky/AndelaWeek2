@@ -160,7 +160,12 @@ class Answerupdate(Resource):
         return {'message': 'Answer status updated'}, 201
 
 
+# @api.errorhandler
+# def server_error_handler(error):
+#     '''Default error handler for 400 errors'''
+#     return {'message': str(error)}, getattr(error, 'code', 400)
+
 @api.errorhandler
 def server_error_handler(error):
-    '''Default error handler for 500 errors'''
-    return {'message': str(error)}, getattr(error, 'code', 400)
+    '''Default error handler for 401 errors'''
+    return {'message': str(error)}, getattr(error, 'code', 401)
