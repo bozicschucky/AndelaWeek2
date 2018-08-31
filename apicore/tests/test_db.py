@@ -12,7 +12,7 @@ class DBModelTestCase(unittest.TestCase):
 
     def test_register_user(self):
         '''Tests user Registeration to a given user to a database '''
-        self.assertEqual({'message': 'User successfully registered'},
+        self.assertIn({'message': 'user is successfully registered'},
                          self.db_handler.register('chucky', 'password'))
 
     def test_get_user(self):

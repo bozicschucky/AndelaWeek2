@@ -56,7 +56,7 @@ class APITestCase(unittest.TestCase):
         res = self.client.post('/api/v2/questions',
                                data=json.dumps(self.question),
                                content_type='application/json')
-        self.assertEqual(res.status_code, 500)
+        self.assertEqual(res.status_code, 400)
         self.assertIn('Missing Authorization Header', str(res.data))
 
     def test_can_get_all_questions(self):
