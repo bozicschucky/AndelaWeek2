@@ -80,6 +80,12 @@ StackOverFlow-Lite App is an application that provides users with the ability to
       * Then run the flask app using `python run.py`   to run the whole project
       * Visit the endpoints described above using post man or the documentated version to test the endpoints
 
+  4. To run the unitests:
+      * set up a test database called 'api_test'
+      * set the database name in the Os environment using `export APP_SETTINGS="testing"`
+      * using Nose test runner run the tests using `nosetests --with-coverage`
+      * this should run all the app tests and return the coverage
+
 
   4.  Tools used to develop this Api.  
         * Postgres version 10  
