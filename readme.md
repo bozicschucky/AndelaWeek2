@@ -5,6 +5,7 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 # Build status  
 [![Build Status](https://travis-ci.org/bozicschucky/AndelaWeek2.svg?branch=ft-heroku)](https://travis-ci.org/bozicschucky/AndelaWeek2)
 [![Coverage Status](https://coveralls.io/repos/github/bozicschucky/AndelaWeek2/badge.svg?branch=ft-heroku)](https://coveralls.io/github/bozicschucky/AndelaWeek2?branch=ft-heroku)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ae1d59f2e0eda6149a6f/maintainability)](https://codeclimate.com/github/bozicschucky/AndelaWeek2/maintainability)
 
 # Getting Started
 
