@@ -21,8 +21,7 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
 
 **Usage**
-  ## checkout the documentated version from the link below
-  * [StackOverFlow-Lite](https://stackoverflowlite2.herokuapp.com/)
+  * checkout the documentated version [StackOverFlow-Lite](https://stackoverflowlite2.herokuapp.com/)
 
 
 * Some of the data arguments to be passed in postman
@@ -43,18 +42,16 @@ StackOverFlow-Lite App is an application that provides users with the ability to
    * Users Answer json data Endpoint takes the following data.  
    `
    {
-      "body": "string"
+      "body": "string",
+      "accept_status":'false'
     }
     `
 
 
 * To interact with the API via Postman, use the link below  
-    The  base url is
-    * ` https://stackoverflowlite2.herokuapp.com/api/v2/ `
+    * The  base url is ` https://stackoverflowlite2.herokuapp.com/api/v2/ `
 
-
-
-    then use the following endpoints to perform the specified tasks
+    * Then use the following endpoints to perform the specified tasks
 
     EndPoint                            | Functionality
     ------------------------            | ----------------------
@@ -68,11 +65,11 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
   1. Clone the project to your local machine:
 
-   `git clone https://github.com/bozicschucky/AndelaWeek2.git`
+    * `git clone https://github.com/bozicschucky/AndelaWeek2.git`
 
   2. Navigate to project directory:
 
-   `cd AndelaWeek2`
+    * `cd AndelaWeek2`
 
   3. Change branch to `ft-heroku`:
 
