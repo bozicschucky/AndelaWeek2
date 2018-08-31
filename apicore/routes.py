@@ -11,6 +11,10 @@ if os.getenv('APP_SETTINGS') == 'testing':
     db_handler = DBhandler(host='localhost', database='',
                            user='postgres', password='sudo')
 
+elif os.getenv('APP_SETTINGS') != 'testing':
+    db_handler = DBhandler(host='localhost', database='api',
+                           user='postgres', password='sudo')
+
 else:
     db = os.getenv('Database')
     db_handler = DBhandler(host=os.getenv('host'), database='',
@@ -40,7 +44,7 @@ user = api.model('User', {
                               description='password', min_length=8)
 })
 
-jwt = {'Authorization': {'Authorization': 'Bearer',
+jwt = {'Authorization': {'Authorization Bearer': 'Bearer',
                          'in': 'header',
                          'type': 'string',
                          'description': 'Enter jwt token'}}
@@ -56,8 +60,7 @@ class register(Resource):
         data = api.payload
         username = data['username']
         password = data['password']
-        db_handler.register(username, password)
-        return {'message': 'user is successfully registered'}, 201
+        return db_handler.register(username, password)
 
 
 @api.route('/auth/login')
@@ -76,7 +79,7 @@ class login(Resource):
             access_token = create_access_token(identity=username)
             return {'message': 'Token created',
                     'access_token': access_token}, 201
-        return {'message': 'Invalid username or password'}, 400
+        return {'message': 'Invalid username or password'}, 401
 
 
 @api.route('/questions')
@@ -160,4 +163,4 @@ class Answerupdate(Resource):
 @api.errorhandler
 def server_error_handler(error):
     '''Default error handler for 500 errors'''
-    return {'message': str(error)}, getattr(error, 'code', 500)
+    return {'message': str(error)}, getattr(error, 'code', 400)
