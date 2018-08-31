@@ -21,11 +21,9 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
 
 **Usage**
+  ## checkout the documentated version from the link below
   * [StackOverFlow-Lite](https://stackoverflowlite2.herokuapp.com/)
 
-
-* On the browser,visit the following url
-  * https://stackoverflowlite2.herokuapp.com/
 
 * Some of the data arguments to be passed in postman
   * Users register/Login Endpoint takes the following data.  
@@ -50,7 +48,9 @@ StackOverFlow-Lite App is an application that provides users with the ability to
     `
 
 
-* To interact with the API via Postman, use the link below
+* To interact with the API via Postman, use the link below  
+    The  base url is
+    * ` https://stackoverflowlite2.herokuapp.com/api/v2/ `
 
 
 
@@ -74,14 +74,14 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
    `cd AndelaWeek2`
 
-  3. Change branch to `ft-db-API`:
+  3. Change branch to `ft-heroku`:
 
-     `git checkout ft-db-API`
+     `git checkout ft-heroku`
 
-      * Activate a virtual environment
-      * pip install requirements.txt
-      * The run the python run.py to run the whole project
-      * Visit the endpoints descibed above using post man to test the endpoints
+      * Activate a virtual environment using `python3 -m virtualenv env`
+      * pip install requirements.txt using `pip install -r requirements.txt`
+      * Then run the flask app using `python run.py`   to run the whole project
+      * Visit the endpoints described above using post man or the documentated version to test the endpoints
 
 
   4.  Tools used to develop this Api.  
