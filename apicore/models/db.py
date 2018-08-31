@@ -14,6 +14,9 @@ class DBhandler(User, Answer, Question):
         if os.getenv('APP_SETTINGS') == 'testing':
             self.db = 'api_test'
 
+        elif os.getenv('APP_SETTINGS') != 'testing':
+            self.db = 'api'
+
         else:
             self.db = os.getenv('Database')
 
@@ -82,7 +85,6 @@ class DBhandler(User, Answer, Question):
         for command in commands:
             self.cursor.execute(command)
             print('tables created successfully')
-        # self.close_db_connection()
 
     def drop_table(self, *table_names):
         ''' Drops the tables created '''
@@ -95,17 +97,19 @@ class DBhandler(User, Answer, Question):
         return sha256.hash(password)
 
     def confirm_password_hash(self, password, pasword_hash):
-        return sha256.verify(password, pasword_hash)
+            return sha256.verify(password, pasword_hash)
 
     def register(self, username, password):
         ''' adds users to the database '''
-        password = self.hash_password(password)
-        user = User(username, password)
-        sql = "INSERT INTO users(username,password) VALUES \
-         ('{}' ,'{}')".format(user.username, user.password)
-        pprint(sql)
-        self.cursor.execute(sql)
-        return {'message': 'User successfully registered'}
+        try:
+            password = self.hash_password(password)
+            user = User(username, password)
+            sql = "INSERT INTO users(username,password) VALUES \
+            ('{}' ,'{}')".format(user.username, user.password)
+            self.cursor.execute(sql)
+            return {'message': 'user is successfully registered'}, 201
+        except Exception as e:
+            return {'message': 'username {} already taken '.format(username)},400
 
     def get_user(self, username):
         '''Gets a user to the database '''
@@ -117,9 +121,9 @@ class DBhandler(User, Answer, Question):
             user = self.cursor.fetchone()
             username = user[1]
             password = user[2]
+            print(user[2])
             return user, password
         except Exception as e:
-            # print({'error': 'User not found {}'.format(e)})
             return{'message': 'User not found'}, 404
 
     def create_question(self, title, body, author):
@@ -128,13 +132,10 @@ class DBhandler(User, Answer, Question):
             author)
         self.cursor.execute(user_sql)
         user = self.cursor.fetchone()
-        # print(user[0])
-        # user_id
         question = Question(title, body, author)
         sql = "INSERT INTO questions(user_id,title,body,author) \
          VALUES ({} ,'{}','{}','{}')".format(
             user[0], question.title, question.body, question.author)
-        print(sql)
         self.cursor.execute(sql)
         return {'message': 'Question created'}, 201
 
@@ -146,10 +147,8 @@ class DBhandler(User, Answer, Question):
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
         questions = [questions for questions in rows]
-        # print(questions)
         last_questions = []
         for index in range(len(questions)):
-            # print(question)
             user_questions = (
                 {'id': questions[index][0],
                  'title': questions[index][1],
@@ -166,9 +165,6 @@ class DBhandler(User, Answer, Question):
                 _id, current_user)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
-            print(question)
-            # question_id = question[0]
-            print(question)
             answers_sql = "SELECT id,body,accept_status \
              FROM answers WHERE question_id = {}".format(
                 _id)
@@ -201,8 +197,6 @@ class DBhandler(User, Answer, Question):
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
             question_id = question[0]
-            print(question[0])
-            # question_id
             sql = "INSERT INTO answers(question_id,body) \
              VALUES ({},'{}')".format(
                 question_id, body)
@@ -222,7 +216,6 @@ class DBhandler(User, Answer, Question):
         '''Deletes a question given an id '''
         sql = "DELETE FROM questions WHERE  id = {} AND author = '{}' ".format(
             _id, current_user)
-        rows_deleted = self.cursor.rowcount
-        print(rows_deleted)
+        # rows_deleted = self.cursor.rowcount
         self.cursor.execute(sql)
         return {"message": "Question {} deleted".format(_id)}
