@@ -55,6 +55,8 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
     EndPoint                            | Functionality
     ------------------------            | ----------------------
+    `POST /auth/register `                     | User first has to register
+    `POST /auth/login `                     | User login in to get a jwt token
     `GET /questions `                     | User can get all questions asked
     `GET /questions/<int:id>  `               | User can a particular question asked
     `POST /questions            `         | User can create a question
@@ -75,12 +77,12 @@ StackOverFlow-Lite App is an application that provides users with the ability to
 
      `git checkout ft-heroku`
 
-      * Activate a virtual environment using `python3 -m virtualenv env`
+      * Activate a virtual environment using `python3 -m virtualenv venv`
       * pip install requirements.txt using `pip install -r requirements.txt`
       * Then run the flask app using `python run.py`   to run the whole project
       * Visit the endpoints described above using post man or the documentated version to test the endpoints
 
-  4. To run the unitests:
+  4. To run the unittests:
       * set up a test database called 'api_test'
       * set the database name in the Os environment using `export APP_SETTINGS="testing"`
       * using Nose test runner run the tests using `nosetests --with-coverage`
