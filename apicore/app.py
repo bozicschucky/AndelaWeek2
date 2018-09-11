@@ -2,6 +2,7 @@ from flask import Flask
 from instance.config import DevelopmentConfig
 from flask_restplus import Api
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 
 app = Flask(__name__, instance_relative_config=True)
@@ -9,6 +10,7 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(DevelopmentConfig)
 app.config['RESTPLUS_VALIDATE'] = True
 app.config['JWT_SECRET_KEY'] = 'random#$8990000000secret'
+CORS(app)
 # swagger ui configs
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 app.config.SWAGGER_UI_OPERATION_ID = True
