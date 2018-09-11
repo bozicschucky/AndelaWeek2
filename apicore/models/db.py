@@ -109,7 +109,8 @@ class DBhandler(User, Answer, Question):
             self.cursor.execute(sql)
             return {'message': 'user is successfully registered'}, 201
         except Exception as e:
-            return {'message': 'username {} already taken '.format(username)},400
+            return {'message': 'username {} \
+                    already taken '.format(username)}, 400
 
     def get_user(self, username):
         '''Gets a user to the database '''
@@ -121,7 +122,7 @@ class DBhandler(User, Answer, Question):
             user = self.cursor.fetchone()
             username = user[1]
             password = user[2]
-            print(user[2])
+            # print(user[2])
             return user, password
         except Exception as e:
             return{'message': 'User not found'}, 404
