@@ -97,7 +97,7 @@ class DBhandler(User, Answer, Question):
         return sha256.hash(password)
 
     def confirm_password_hash(self, password, pasword_hash):
-            return sha256.verify(password, pasword_hash)
+        return sha256.verify(password, pasword_hash)
 
     def register(self, username, password):
         ''' adds users to the database '''
@@ -198,9 +198,10 @@ class DBhandler(User, Answer, Question):
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
             question_id = question[0]
+            answer = Answer(body)
             sql = "INSERT INTO answers(question_id,body) \
              VALUES ({},'{}')".format(
-                question_id, body)
+                question_id, answer.body)
             print(sql)
             self.cursor.execute(sql)
         except Exception as e:
