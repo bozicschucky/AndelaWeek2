@@ -1,3 +1,4 @@
+import os
 from flask_restplus import Resource, fields
 from flask_jwt_extended import (
     jwt_required, create_access_token,
@@ -5,7 +6,6 @@ from flask_jwt_extended import (
 )
 from .app import api
 from apicore.models.db import DBhandler
-import os
 
 if os.getenv('APP_SETTINGS') == 'testing':
     db_handler = DBhandler(host='localhost', database='',
@@ -159,11 +159,6 @@ class Answerupdate(Resource):
         db_handler.update(accept_status, question_id)
         return {'message': 'Answer status updated'}, 201
 
-
-# @api.errorhandler
-# def server_error_handler(error):
-#     '''Default error handler for 400 errors'''
-#     return {'message': str(error)}, getattr(error, 'code', 400)
 
 @api.errorhandler
 def server_error_handler(error):
