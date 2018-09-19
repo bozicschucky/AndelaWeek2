@@ -10,11 +10,6 @@ from apicore.models.db import DBhandler
 if os.getenv('APP_SETTINGS') == 'testing':
     db_handler = DBhandler(host='localhost', database='',
                            user='postgres', password='sudo')
-
-elif os.getenv('APP_SETTINGS') != 'testing':
-    db_handler = DBhandler(host='localhost', database='api',
-                           user='postgres', password='sudo')
-
 else:
     db = os.getenv('Database')
     db_handler = DBhandler(host=os.getenv('host'), database='',

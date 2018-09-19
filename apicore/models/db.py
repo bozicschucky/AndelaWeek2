@@ -13,10 +13,6 @@ class DBhandler(User, Answer, Question):
     def __init__(self, host, database, user, password):
         if os.getenv('APP_SETTINGS') == 'testing':
             self.db = 'api_test'
-
-        elif os.getenv('APP_SETTINGS') != 'testing':
-            self.db = 'api'
-
         else:
             self.db = os.getenv('Database')
 
