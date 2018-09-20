@@ -145,6 +145,16 @@ class DBhandler(User, Answer, Question):
         rows = self.cursor.fetchall()
         questions = [questions for questions in rows]
         last_questions = []
+        platform = []
+
+        sql = "SELECT id,title,body,author FROM questions \
+         WHERE author != '{}' ORDER BY published_date desc ".format(current_user)
+        self.cursor.execute(sql)
+        row = self.cursor.fetchall()
+        platform_questions = [questions for questions in row]
+        print(platform_questions)
+        # self
+
         for index in range(len(questions)):
             user_questions = (
                 {'id': questions[index][0],
@@ -152,18 +162,27 @@ class DBhandler(User, Answer, Question):
                  'body': questions[index][2]})
             last_questions.append(user_questions)
 
-        return {'all_questions': last_questions, 'user': current_user}
+        for index in range(len(platform_questions)):
+            plat_questions = (
+                {'id': platform_questions[index][0],
+                 'title': platform_questions[index][1],
+                 'body': platform_questions[index][2],
+                 'author': platform_questions[index][3]})
+            platform.append(plat_questions)
 
-    def get_question(self, _id, current_user):
+        return {'all_questions': last_questions,
+                'user': current_user, 'platform_questions': platform}
+
+    def get_question(self, _id):
         ''' Gets one questions from a database table based on user'''
         try:
             question_sql = "SELECT title,body,author,published_date \
-             FROM questions WHERE id = {} AND author = '{}'".format(
-                _id, current_user)
+             FROM questions WHERE id = {} ORDER BY published_date desc ".format(
+                _id)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
             answers_sql = "SELECT id,body,accept_status \
-             FROM answers WHERE question_id = {}".format(
+             FROM answers WHERE question_id = {} ORDER BY published_date desc".format(
                 _id)
             self.cursor.execute(answers_sql)
             answers = self.cursor.fetchall()

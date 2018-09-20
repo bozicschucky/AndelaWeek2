@@ -112,7 +112,7 @@ class Question(Resource):
     def get(self, _id):
         current_user = get_jwt_identity()
         ''' Get a given resource/question based on id '''
-        return db_handler.get_question(_id, current_user)
+        return db_handler.get_question(_id)
 
     @jwt_required
     @api.doc(params=jwt)
