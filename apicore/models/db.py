@@ -139,7 +139,7 @@ class DBhandler(User, Answer, Question):
     def get_all_questions(self, current_user):
         ''' Gets one questions from a database'''
         sql = "SELECT id,title,body FROM questions \
-         WHERE author = '{}' ".format(
+         WHERE author = '{}' ORDER BY published_date desc ".format(
             current_user)
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
@@ -152,7 +152,7 @@ class DBhandler(User, Answer, Question):
                  'body': questions[index][2]})
             last_questions.append(user_questions)
 
-        return {'all_questions': last_questions}
+        return {'all_questions': last_questions, 'user': current_user}
 
     def get_question(self, _id, current_user):
         ''' Gets one questions from a database table based on user'''
@@ -202,6 +202,48 @@ class DBhandler(User, Answer, Question):
             self.cursor.execute(sql)
         except Exception as e:
             return {'message': 'Question does\'nt exist'}
+
+    def user_profile(self, current_user):
+        ''' returns the logged in user profile '''
+        sql = "SELECT id,title,body FROM questions \
+         WHERE author = '{}' ORDER BY published_date desc ".format(
+            current_user)
+        self.cursor.execute(sql)
+        questions = self.cursor.fetchall()
+        question_ids = []
+        answers = []
+        recent_questions = []
+        for i in range(len(questions)):
+            # print(questions[i][0])
+            question_ids.append(questions[i][0])
+            recent_questions.append(questions[i][1])
+        print(questions)
+        # print(question_ids)
+        for i in question_ids:
+            answers_sql = "SELECT id,body,accept_status \
+             FROM answers WHERE question_id = {}".format(
+                i)
+            self.cursor.execute(answers_sql)
+            user_answers = self.cursor.fetchall()
+            answers.append(user_answers)
+            # print(answers)
+        # print(answers)
+        # total_answers = len(answers)
+        # try:
+        #     for i in range(len(answers)):
+        #         # print(i)
+        #         print(answers[i][1])
+        # except Exception as e:
+        #     # raise e
+        #     print('list is out of index')
+
+        number_of_questions = len(questions)
+        data = {
+            'username': current_user,
+            'number_of_questions': number_of_questions,
+            'recent': recent_questions
+        }
+        return data, 200
 
     def update(self, accept_status, question_id):
         ''' updates the question asked '''
