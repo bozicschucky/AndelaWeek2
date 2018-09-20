@@ -236,31 +236,26 @@ class DBhandler(User, Answer, Question):
             # print(questions[i][0])
             question_ids.append(questions[i][0])
             recent_questions.append(questions[i][1])
-        print(questions)
-        # print(question_ids)
+        # print(questions)
+        print(question_ids)
         for i in question_ids:
             answers_sql = "SELECT id,body,accept_status \
              FROM answers WHERE question_id = {}".format(
                 i)
             self.cursor.execute(answers_sql)
             user_answers = self.cursor.fetchall()
-            answers.append(user_answers)
-            # print(answers)
-        # print(answers)
-        # total_answers = len(answers)
-        # try:
-        #     for i in range(len(answers)):
-        #         # print(i)
-        #         print(answers[i][1])
-        # except Exception as e:
-        #     # raise e
-        #     print('list is out of index')
+            details = {
+                str(i): user_answers
+            }
+            answers.append(details)
 
         number_of_questions = len(questions)
         data = {
             'username': current_user,
             'number_of_questions': number_of_questions,
-            'recent': recent_questions
+            'recent': recent_questions,
+            'question_ids': question_ids,
+            'answers': answers
         }
         return data, 200
 
