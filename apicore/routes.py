@@ -137,6 +137,18 @@ class QuestionsReply(Resource):
         return {'message': 'answer created for  question {}'.format(_id)}, 201
 
 
+@api.route('/profile')
+class Userprofile(Resource):
+    """Shows single user profile"""
+
+    @jwt_required
+    @api.doc(params=jwt)
+    def get(self):
+        current_user = get_jwt_identity()
+        ''' Returns the user profile '''
+        return db_handler.user_profile(current_user)
+
+
 @api.route('/questions/<int:question_id>/answers/<int:id>')
 class Answerupdate(Resource):
     """Mark an answer as accepted or update an answer"""
