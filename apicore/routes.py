@@ -16,6 +16,7 @@ else:
                            user=os.getenv('User'),
                            password=os.getenv('Password'))
 # db_handler.create_table()
+# db_handler.drop_table('users', 'answers', 'questions')
 
 question = api.model('Question', {
     'title': fields.String(required=True,
@@ -156,14 +157,15 @@ class Answerupdate(Resource):
     @api.doc(params=jwt)
     @api.expect(answer, validate=True)
     # @api.marshal_with(answer, skip_none=True, code=201)
-    def put(self, author_id, id):
+    def put(self, question_id, id):
         data = api.payload
-        question_id = question_id
-        # print(author_id)
         _id = id
-        print(_id)
+        answer_id = question_id
+        current_user = get_jwt_identity()
+        # _id = id
+        # print(_id)
         accept_status = data['accept_status']
-        db_handler.update(accept_status, question_id)
+        db_handler.update(current_user, accept_status, answer_id)
         return {'message': 'Answer status updated'}, 201
 
 

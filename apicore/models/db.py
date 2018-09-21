@@ -49,6 +49,7 @@ class DBhandler(User, Answer, Question):
               id serial,
               username VARCHAR(25) UNIQUE NOT NULL,
               password VARCHAR(100) NOT NULL,
+              join_date timestamp DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (id)
             );
             """,
@@ -71,6 +72,7 @@ class DBhandler(User, Answer, Question):
               question_id int NOT NULL,
               body VARCHAR(2550),
               accept_status boolean DEFAULT FALSE,
+              author VARCHAR(100) NOT NULL,
               published_date timestamp DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
               FOREIGN KEY (question_id) REFERENCES questions(id) \
@@ -259,10 +261,10 @@ class DBhandler(User, Answer, Question):
         }
         return data, 200
 
-    def update(self, accept_status, question_id):
+    def update(self, current_user, accept_status, answer_id):
         ''' updates the question asked '''
         sql = 'UPDATE answers SET accept_status = {} WHERE id = {}'.format(
-            accept_status, question_id)
+            accept_status, answer_id)
         self.cursor.execute(sql)
         return {'message': 'Answer status updated'}
 
