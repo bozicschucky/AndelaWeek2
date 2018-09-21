@@ -149,8 +149,9 @@ class DBhandler(User, Answer, Question):
         last_questions = []
         platform = []
 
-        sql = "SELECT id,title,body,author FROM questions \
-         WHERE author != '{}' ORDER BY published_date desc ".format(current_user)
+        sql = """ SELECT id,title,body,author FROM questions WHERE
+                    author != '{}' ORDER BY published_date desc """\
+                    .format(current_user)
         self.cursor.execute(sql)
         row = self.cursor.fetchall()
         platform_questions = [questions for questions in row]
@@ -178,14 +179,13 @@ class DBhandler(User, Answer, Question):
     def get_question(self, _id):
         ''' Gets one questions from a database table based on user'''
         try:
-            question_sql = "SELECT title,body,author,published_date \
-             FROM questions WHERE id = {} ORDER BY published_date desc ".format(
-                _id)
+            question_sql = """ SELECT title,body,author,published_date FROM
+                            questions WHERE id = {} ORDER BY
+                                        published_date desc """.format(_id)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
-            answers_sql = "SELECT id,body,accept_status \
-             FROM answers WHERE question_id = {} ORDER BY published_date desc".format(
-                _id)
+            answers_sql = """ SELECT id,body,accept_status FROM answers
+             WHERE question_id = {} ORDER BY published_date desc""".format(_id)
             self.cursor.execute(answers_sql)
             answers = self.cursor.fetchall()
             answers = [row for row in answers]
@@ -272,8 +272,8 @@ class DBhandler(User, Answer, Question):
         elif user is None:
             user = False
 
-        answer_sql = "SELECT author FROM answers WHERE id={} and author='{}' ".\
-            format(answer_id, current_user)
+        answer_sql = """ SELECT author FROM answers WHERE id={}
+                            and author='{}' """.format(answer_id, current_user)
         self.cursor.execute(answer_sql)
         answer_author = self.cursor.fetchone()
         if answer_author:
@@ -282,8 +282,8 @@ class DBhandler(User, Answer, Question):
             answer_author = False
 
         if user:
-            sql = 'UPDATE answers SET accept_status = {} WHERE id = {}'.format(
-                accept_status, answer_id)
+            sql = """ UPDATE answers SET accept_status = {}
+                    WHERE id = {}""".format(accept_status, answer_id)
             self.cursor.execute(sql)
             return {'message': 'Answer status updated'}, 200
         elif answer_author:
@@ -297,8 +297,8 @@ class DBhandler(User, Answer, Question):
 
     def delete_questions(self, _id, current_user):
         '''Deletes a question given an id '''
-        sql = "DELETE FROM questions WHERE  id = {} AND author = '{}' ".format(
-            _id, current_user)
+        sql = """ DELETE FROM questions WHERE  id = {}
+                        AND author = '{}' """.format(_id, current_user)
         # rows_deleted = self.cursor.rowcount
         self.cursor.execute(sql)
         return {"message": "Question {} deleted".format(_id)}
