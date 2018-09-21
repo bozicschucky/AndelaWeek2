@@ -333,7 +333,8 @@ class APITestCase(unittest.TestCase):
                              headers={'Authorization':
                                       'Bearer {}'.format(self.token)})
         self.assertEqual(rv.status_code, 200)
-        self.assertEqual("Answer status updated", str(rv.data))
+        rv = rv.json
+        self.assertEqual("Answer status updated", rv['message'])
 
     def test_delete_question(self):
         ''' Test can delete a question '''
