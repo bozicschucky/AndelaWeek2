@@ -111,7 +111,6 @@ class Question(Resource):
     @jwt_required
     @api.doc(params=jwt)
     def get(self, _id):
-        current_user = get_jwt_identity()
         ''' Get a given resource/question based on id '''
         return db_handler.get_question(_id)
 
@@ -134,7 +133,7 @@ class QuestionsReply(Resource):
         '''Get a question and reply to it with an Answer '''
         current_user = get_jwt_identity()
         data = api.payload
-        db_handler.answer_question(_id, data['body'])
+        db_handler.answer_question(current_user, _id, data['body'])
         return {'message': 'answer created for  question {}'.format(_id)}, 201
 
 
