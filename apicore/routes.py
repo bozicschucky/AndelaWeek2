@@ -164,8 +164,8 @@ class Answerupdate(Resource):
         # _id = id
         # print(_id)
         accept_status = data['accept_status']
-        db_handler.update(current_user, accept_status, answer_id)
-        return {'message': 'Answer status updated'}, 201
+        body = data['body']
+        return db_handler.update(current_user, body, accept_status, answer_id)
 
 
 @api.errorhandler

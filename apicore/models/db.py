@@ -261,12 +261,39 @@ class DBhandler(User, Answer, Question):
         }
         return data, 200
 
-    def update(self, current_user, accept_status, answer_id):
+    def update(self, current_user, body, accept_status, answer_id):
         ''' updates the question asked '''
-        sql = 'UPDATE answers SET accept_status = {} WHERE id = {}'.format(
-            accept_status, answer_id)
-        self.cursor.execute(sql)
-        return {'message': 'Answer status updated'}
+        user_sql = "SELECT author FROM questions \
+         WHERE author = '{}' ".format(current_user)
+        self.cursor.execute(user_sql)
+        user = self.cursor.fetchone()
+        if user:
+            user = user[0]
+        elif user is None:
+            user = False
+
+        answer_sql = "SELECT author FROM answers WHERE id={} and author='{}' ".\
+            format(answer_id, current_user)
+        self.cursor.execute(answer_sql)
+        answer_author = self.cursor.fetchone()
+        if answer_author:
+            answer_author = answer_author[0]
+        elif answer_author is None:
+            answer_author = False
+
+        if user:
+            sql = 'UPDATE answers SET accept_status = {} WHERE id = {}'.format(
+                accept_status, answer_id)
+            self.cursor.execute(sql)
+            return {'message': 'Answer status updated'}, 200
+        elif answer_author:
+            sql = "UPDATE answers SET body = '{}' WHERE id = {}".format(
+                body, answer_id)
+            self.cursor.execute(sql)
+            return {'message': 'Answer Body updated successfully'}, 200
+        else:
+            return {'message': 'You are not allowed to update these details'},\
+                401
 
     def delete_questions(self, _id, current_user):
         '''Deletes a question given an id '''
