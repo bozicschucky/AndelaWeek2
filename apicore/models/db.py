@@ -208,7 +208,7 @@ class DBhandler(User, Answer, Question):
         except Exception as e:
             return{'message': 'Quesion {} does\'nt exist'.format(_id)}, 404
 
-    def answer_question(self, _id, body):
+    def answer_question(self, author, _id, body):
         ''' Creates an answer to a question '''
         try:
             question_sql = "SELECT id FROM questions WHERE id = {}".format(_id)
@@ -216,9 +216,9 @@ class DBhandler(User, Answer, Question):
             question = self.cursor.fetchone()
             question_id = question[0]
             answer = Answer(body)
-            sql = "INSERT INTO answers(question_id,body) \
-             VALUES ({},'{}')".format(
-                question_id, answer.body)
+            sql = "INSERT INTO answers(question_id,body,author) \
+             VALUES ({},'{}','{}')".format(
+                question_id, answer.body, author)
             print(sql)
             self.cursor.execute(sql)
         except Exception as e:
