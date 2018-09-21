@@ -245,6 +245,96 @@ class APITestCase(unittest.TestCase):
                                         'Bearer {}'.format(self.token)})
         self.assertEqual(res.status_code, 201)
 
+    def test_can_get_user_profile(self):
+        '''Test can create an answer to question '''
+        response = self.client.post('api/v2/auth/register',
+                                    data=json.dumps(self.user),
+                                    content_type='application/json'
+                                    )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('user is successfully registered',
+                      str(response.data))
+
+        response = self.client.post('api/v2/auth/login',
+                                    data=json.dumps(self.user),
+                                    content_type='application/json'
+                                    )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Token created', str(response.data))
+
+        login_response = response.json
+        self.token = login_response['access_token']
+        res = self.client.post('/api/v2/questions',
+                               data=json.dumps(self.question),
+                               content_type='application/json',
+                               headers={'Authorization':
+                                        'Bearer {}'.format(self.token)})
+        self.assertEqual(res.status_code, 201)
+
+        answer = {"body": "Use windows because its cool",
+                  'accept_status': False}
+        res = self.client.post('/api/v2/questions/1/answers',
+                               data=json.dumps(answer),
+                               content_type='application/json',
+                               headers={'Authorization':
+                                        'Bearer {}'.format(self.token)})
+        self.assertEqual(res.status_code, 201)
+
+        rv = self.client.get('api/v2/profile',
+                             content_type='application/json',
+                             headers={'Authorization':
+                                          'Bearer {}'.format(self.token)})
+        self.assertEqual(rv.status_code, 200)
+        rv_reponse = rv.json
+        username = rv_reponse['username']
+        recent = rv_reponse['recent']
+        self.assertEqual('tester', username)
+        self.assertEqual("I am getting errors when i run pytest", recent[0])
+
+    def test_can_update_answer_to_question(self):
+        '''Test can create an answer to question '''
+        response = self.client.post('api/v2/auth/register',
+                                    data=json.dumps(self.user),
+                                    content_type='application/json'
+                                    )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('user is successfully registered', str(response.data))
+
+        response = self.client.post('api/v2/auth/login',
+                                    data=json.dumps(self.user),
+                                    content_type='application/json'
+                                    )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Token created', str(response.data))
+
+        login_response = response.json
+        self.token = login_response['access_token']
+        res = self.client.post('/api/v2/questions',
+                               data=json.dumps(self.question),
+                               content_type='application/json',
+                               headers={'Authorization':
+                                        'Bearer {}'.format(self.token)})
+        self.assertEqual(res.status_code, 201)
+
+        answer = {"body": "Use windows because its cool",
+                  'accept_status': False}
+        res = self.client.post('/api/v2/questions/1/answers',
+                               data=json.dumps(answer),
+                               content_type='application/json',
+                               headers={'Authorization':
+                                        'Bearer {}'.format(self.token)})
+        self.assertEqual(res.status_code, 201)
+        answer_update = {"body": "Use windows because its cool",
+                         'accept_status': True}
+
+        rv = self.client.put('api/v2/questions/1/answers/2',
+                             data=json.dumps(answer_update),
+                             content_type='application/json',
+                             headers={'Authorization':
+                                      'Bearer {}'.format(self.token)})
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual("Answer status updated", str(rv.data))
+
     def test_delete_question(self):
         ''' Test can delete a question '''
         response = self.client.post('api/v2/auth/register',
