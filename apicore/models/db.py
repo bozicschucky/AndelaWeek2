@@ -33,14 +33,6 @@ class DBhandler(User, Answer, Question):
         except (Exception, psycopg2.DatabaseError) as e:
             pprint(e, "Can't connect to the db ")
 
-    def close_db_connection(self):
-        ''' closes connection to a database '''
-        print('committing changes to db')
-        self.conn.commit()
-        print('db connection closed ')
-        self.cursor.close()
-        self.conn.close()
-
     def create_table(self):
         '''creates tables in the postgres database'''
         commands = (
@@ -82,13 +74,11 @@ class DBhandler(User, Answer, Question):
         )
         for command in commands:
             self.cursor.execute(command)
-            print('tables created successfully')
 
     def drop_table(self, *table_names):
         ''' Drops the tables created '''
         for table_name in table_names:
             drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
-            pprint('all tables dropped')
             self.cursor.execute(drop_table)
 
     def hash_password(self, password):
@@ -120,7 +110,6 @@ class DBhandler(User, Answer, Question):
             user = self.cursor.fetchone()
             username = user[1]
             password = user[2]
-            # print(user[2])
             return user, password
         except Exception as e:
             return{'message': 'User not found'}, 404
@@ -155,9 +144,6 @@ class DBhandler(User, Answer, Question):
         self.cursor.execute(sql)
         row = self.cursor.fetchall()
         platform_questions = [questions for questions in row]
-        print(platform_questions)
-        # self
-
         for index in range(len(questions)):
             user_questions = (
                 {'id': questions[index][0],
@@ -220,7 +206,6 @@ class DBhandler(User, Answer, Question):
             sql = "INSERT INTO answers(question_id,body,author) \
              VALUES ({},'{}','{}')".format(
                 question_id, answer.body, author)
-            print(sql)
             self.cursor.execute(sql)
         except Exception as e:
             return {'message': 'Question does\'nt exist'}
@@ -236,10 +221,8 @@ class DBhandler(User, Answer, Question):
         answers = []
         recent_questions = []
         for i in range(len(questions)):
-            # print(questions[i][0])
             question_ids.append(questions[i][0])
             recent_questions.append(questions[i][1])
-        # print(questions)
         print(question_ids)
         for i in question_ids:
             answers_sql = "SELECT id,body,accept_status \
@@ -262,7 +245,8 @@ class DBhandler(User, Answer, Question):
         }
         return data, 200
 
-    def update(self, current_user, body, accept_status, question_id, answer_id):
+    def update(self, current_user, body,
+               accept_status, question_id, answer_id):
         ''' updates the question asked '''
         user_sql = "SELECT author FROM questions \
          WHERE author = '{}' AND id={} ".format(current_user, question_id)
@@ -274,26 +258,25 @@ class DBhandler(User, Answer, Question):
         elif question_author is None:
             question_author = False
 
-        answer_sql = " SELECT author FROM answers WHERE author='{}' AND question_id = {} AND id = {} ".format(
+        answer_sql = """ SELECT author FROM answers WHERE author='{}'
+                            AND question_id = {} AND id = {} """.format(
             current_user, question_id, answer_id)
         self.cursor.execute(answer_sql)
         answer = self.cursor.fetchone()
         answer_author = answer
-
         if answer_author:
             answer_author = answer_author[0]
         elif answer_author is None:
             answer_author = False
 
-        print(question_author)
-        print(answer_author)
-
         if question_author:
             sql = """ UPDATE answers SET accept_status = {}
-                    WHERE id = {} AND question_id = {} """.format(accept_status, answer_id, question_id)
+                            WHERE id = {} AND question_id = {}
+                            """.format(accept_status, answer_id, question_id)
             self.cursor.execute(sql)
             return {'message': 'Answer status updated'}, 200
         elif answer_author:
+
             sql = "UPDATE answers SET body = '{}' WHERE id = {}".format(
                 body, answer_id)
             self.cursor.execute(sql)
@@ -306,6 +289,5 @@ class DBhandler(User, Answer, Question):
         '''Deletes a question given an id '''
         sql = """ DELETE FROM questions WHERE  id = {}
                         AND author = '{}' """.format(_id, current_user)
-        # rows_deleted = self.cursor.rowcount
         self.cursor.execute(sql)
         return {"message": "Question {} deleted".format(_id)}
