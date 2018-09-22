@@ -184,7 +184,7 @@ class DBhandler(User, Answer, Question):
                                         published_date desc """.format(_id)
             self.cursor.execute(question_sql)
             question = self.cursor.fetchone()
-            answers_sql = """ SELECT id,body,accept_status FROM answers
+            answers_sql = """ SELECT id,body,accept_status,author FROM answers
              WHERE question_id = {} ORDER BY published_date desc""".format(_id)
             self.cursor.execute(answers_sql)
             answers = self.cursor.fetchall()
@@ -195,7 +195,8 @@ class DBhandler(User, Answer, Question):
                     {
                         'id': answers[index][0],
                         'body': answers[index][1],
-                        'status': answers[index][2]
+                        'status': answers[index][2],
+                        'author': answers[index][3]
                     })
                 fetched_answers.append(user_answers)
             return {'question': {'title': question[0],
@@ -261,29 +262,35 @@ class DBhandler(User, Answer, Question):
         }
         return data, 200
 
-    def update(self, current_user, body, accept_status, answer_id):
+    def update(self, current_user, body, accept_status, question_id, answer_id):
         ''' updates the question asked '''
         user_sql = "SELECT author FROM questions \
-         WHERE author = '{}' ".format(current_user)
+         WHERE author = '{}' AND id={} ".format(current_user, question_id)
         self.cursor.execute(user_sql)
-        user = self.cursor.fetchone()
-        if user:
-            user = user[0]
-        elif user is None:
-            user = False
+        question_author = self.cursor.fetchone()
 
-        answer_sql = """ SELECT author FROM answers WHERE id={}
-                            and author='{}' """.format(answer_id, current_user)
+        if question_author:
+            question_author = question_author[0]
+        elif question_author is None:
+            question_author = False
+
+        answer_sql = " SELECT author FROM answers WHERE author='{}' AND question_id = {} AND id = {} ".format(
+            current_user, question_id, answer_id)
         self.cursor.execute(answer_sql)
-        answer_author = self.cursor.fetchone()
+        answer = self.cursor.fetchone()
+        answer_author = answer
+
         if answer_author:
             answer_author = answer_author[0]
         elif answer_author is None:
             answer_author = False
 
-        if user:
+        print(question_author)
+        print(answer_author)
+
+        if question_author:
             sql = """ UPDATE answers SET accept_status = {}
-                    WHERE id = {}""".format(accept_status, answer_id)
+                    WHERE id = {} AND question_id = {} """.format(accept_status, answer_id, question_id)
             self.cursor.execute(sql)
             return {'message': 'Answer status updated'}, 200
         elif answer_author:
